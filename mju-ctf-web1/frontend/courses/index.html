@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>내 수강 목록 - MJSEC</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <main class="page">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">MJSEC Academy</p>
+        <h1>내 수강 목록</h1>
+      </div>
+      <nav>
+        <a href="/">강의 목록</a>
+        <a href="/courses/">내 수강 목록</a>
+      </nav>
+    </header>
+
+    <section class="summary">
+      <span>보유 마일리지</span>
+      <strong id="mileage">-</strong>
+    </section>
+
+    <section>
+      <div class="section-title">
+        <h2>수강중인 강의</h2>
+        <span id="count" class="meta">0 courses</span>
+      </div>
+      <div id="courseList" class="course-grid"></div>
+      <pre id="flagBox" class="flag-box" hidden></pre>
+    </section>
+  </main>
+
+  <script>
+    const mileageEl = document.querySelector('#mileage');
+    const countEl = document.querySelector('#count');
+    const courseListEl = document.querySelector('#courseList');
+    const flagBoxEl = document.querySelector('#flagBox');
+
+    async function loadMyCourses() {
+      const res = await fetch('/api/me/courses');
+      const data = await res.json();
+
+      mileageEl.textContent = `${data.mileage} M`;
+      countEl.textContent = `${data.enrolled_count} courses`;
+
+      if (data.courses.length === 0) {
+        courseListEl.innerHTML = '<p class="empty">아직 수강중인 강의가 없습니다.</p>';
+      } else {
+        courseListEl.innerHTML = '';
+        data.courses.forEach((course) => {
+          const item = document.createElement('article');
+          item.className = 'course-card';
+          item.innerHTML = `
+            <div>
+              <p class="category">${course.category}</p>
+              <h3>${course.title}</h3>
+              <p class="meta">${course.level} · ${course.mileage} mileage</p>
+            </div>
+            <div class="card-actions">
+              <span class="button secondary">수강중</span>
+            </div>
+          `;
+          courseListEl.appendChild(item);
+        });
+      }
+
+      if (data.flag) {
+        flagBoxEl.hidden = false;
+        flagBoxEl.textContent = data.flag;
+      } else {
+        flagBoxEl.hidden = true;
+        flagBoxEl.textContent = '';
+      }
+    }
+
+    loadMyCourses();
+  </script>
+</body>
+</html>

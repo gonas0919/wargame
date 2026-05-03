@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>MJSEC Portal - Profile</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <h2>MJSEC</h2>
+      <nav class="nav">
+        <a href="/board">Dashboard</a>
+        <a href="/notices">Notices</a>
+        <a href="/resources">Resources</a>
+        <a class="active" href="/profile">Profile</a>
+        <a href="/admin">Admin</a>
+        <a href="/">Logout</a>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <section class="header">
+        <h1>Profile</h1>
+        <p>Your account information.</p>
+      </section>
+
+      <section class="card">
+        <h3>Account</h3>
+        <table class="table">
+          <tbody>
+            <tr>
+              <th>{{ user.username }}</th>
+              <td>guest</td>
+            </tr>
+            <tr>
+              <th>Role</th>
+              <td>{{ user.role }}</td>
+            </tr>
+            <tr>
+              <th>Status</th>
+              <td>Active</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="card">
+        <h3>Session</h3>
+        <p>
+          Your session is managed by a signed token. Regular members cannot access operator-only pages.
+        </p>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>MJSEC Portal - Login</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="login-wrapper">
+    <div class="login-card">
+      <h1>MJSEC Portal</h1>
+      <p>Internal member portal</p>
+
+      <form action="/api/login" method="post">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input id="username" name="username" type="text" placeholder="guest">
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input id="password" name="password" type="password" placeholder="guest">
+        </div>
+
+        <button type="submit">Login</button>
+      </form>
+
+      <p style="margin-top: 18px; font-size: 13px;">
+        Test account: guest / guest
+      </p>
+    </div>
+  </div>
+</body>
+</html>

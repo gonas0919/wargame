@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>MJSEC Portal - Admin</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <h2>MJSEC</h2>
+      <nav class="nav">
+        <a href="/board">Dashboard</a>
+        <a href="/notices">Notices</a>
+        <a href="/resources">Resources</a>
+        <a href="/profile">Profile</a>
+        <a class="active" href="/admin">Admin</a>
+        <a href="/api/logout">Logout</a>
+        <a href="/dev_backup/" style="display: none;">Dev Backup</a>
+
+      </nav>
+    </aside>
+
+    <main class="main">
+      <section class="header">
+        <h1>Admin Console</h1>
+        <p>Operator-only area.</p>
+      </section>
+
+      {% if is_admin %}
+      <section class="card success">
+        <h3>Access Granted</h3>
+        <p>{{ message }}</p>
+      </section>
+
+      <section class="card success">
+        <h3>Flag</h3>
+        <div class="code-box">{{ flag }}</div>
+      </section>
+      {% else %}
+      <section class="card danger">
+        <h3>Access Restricted</h3>
+        <p>{{ message }}</p>
+      </section>
+
+      <section class="card">
+        <h3>Current Role</h3>
+        <div class="code-box">{{ user.role }}</div>
+      </section>
+      {% endif %}
+    </main>
+  </div>
+</body>
+</html>

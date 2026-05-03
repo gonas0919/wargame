@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MJSEC 수강신청</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <main class="page">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">MJSEC Academy</p>
+        <h1>수강신청</h1>
+      </div>
+      <nav>
+        <a href="/">강의 목록</a>
+        <a href="/courses/">내 수강 목록</a>
+      </nav>
+    </header>
+
+    <section class="summary">
+      <span>보유 마일리지</span>
+      <strong id="mileage">-</strong>
+    </section>
+
+    <section>
+      <div class="section-title">
+        <h2>개설 강의</h2>
+        <button id="resetBtn" class="secondary" type="button">초기화</button>
+      </div>
+      <div id="courseList" class="course-grid"></div>
+    </section>
+
+    <p id="message" class="message">강의 정보를 불러오는 중입니다.</p>
+  </main>
+
+  <script>
+    const mileageEl = document.querySelector('#mileage');
+    const courseListEl = document.querySelector('#courseList');
+    const messageEl = document.querySelector('#message');
+    const resetBtn = document.querySelector('#resetBtn');
+
+    function enrollLabel(course) {
+      if (course.enrolled) {
+        return '신청완료';
+      }
+
+      if (!course.available) {
+        return '마일리지 부족';
+      }
+
+      return '신청';
+    }
+
+    function render(data) {
+      const alreadyEnrolled = data.enrolled_count >= 1;
+
+      mileageEl.textContent = `${data.mileage} M`;
+      courseListEl.innerHTML = '';
+
+      data.courses.forEach((course) => {
+        const disabled = course.enrolled || !course.available || alreadyEnrolled;
+        const item = document.createElement('article');
+        item.className = 'course-card';
+        item.innerHTML = `
+          <div>
+            <p class="category">${course.category}</p>
+            <h3>${course.title}</h3>
+            <p class="meta">${course.level} · ${course.mileage} mileage</p>
+          </div>
+          <div class="card-actions">
+            ${course.enrolled ? '<span class="button secondary">수강중</span>' : ''}
+            <button type="button" data-course-id="${course.id}" ${disabled ? 'disabled' : ''}>
+              ${alreadyEnrolled && !course.enrolled ? '신청 제한' : enrollLabel(course)}
+            </button>
+          </div>
+        `;
+        courseListEl.appendChild(item);
+      });
+
+      document.querySelectorAll('[data-course-id]').forEach((button) => {
+        button.addEventListener('click', () => enroll(button.dataset.courseId, button));
+      });
+    }
+
+    async function loadCourses() {
+      const res = await fetch('/api/courses');
+      const data = await res.json();
+      render(data);
+      messageEl.textContent = '신청할 강의를 선택하세요.';
+    }
+
+    async function enroll(courseId, button) {
+      button.disabled = true;
+      messageEl.textContent = '수강신청을 처리하고 있습니다.';
+
+      const res = await fetch('/api/enroll', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ course_id: courseId }),
+      });
+      const data = await res.json();
+
+      render(data);
+      messageEl.textContent = res.ok ? '수강신청 요청이 처리되었습니다.' : data.message;
+    }
+
+    async function reset() {
+      const res = await fetch('/api/reset', { method: 'POST' });
+      const data = await res.json();
+      render(data);
+      messageEl.textContent = '초기화되었습니다.';
+    }
+
+    resetBtn.addEventListener('click', reset);
+    loadCourses();
+  </script>
+</body>
+</html>
