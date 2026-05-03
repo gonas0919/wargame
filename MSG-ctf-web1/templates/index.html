@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>영수와의 채팅</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <meta name="theme-color" content="#FEE500">
+    <meta name="color-scheme" content="light">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-left">
+                <div class="kakao-avatar">영</div>
+                <div class="header-meta">
+                    <h1 class="chat-title">도둑놈</h1>
+                    <p class="chat-subtitle">돈 빌리고 안 갚음</p>
+                </div>
+            </div>
+            <div class="header-right toolbar-icons">
+                <span class="icon">🔍</span>
+                <span class="icon">📞</span>
+                <span class="icon">☰</span>
+            </div>
+        </div>
+
+        <div class="chat-container">
+            <div class="chat-messages" id="chatMessages">
+                <div class="message ai">
+                    <div class="message-avatar">영</div>
+                    <div class="message-content">
+                        <div class="message-text">지금 돈이 없어서..<br><br>
+다음주에 갚을게..<br>
+<span id="urlSuffix"></span></div>
+                        <div class="message-time">오후 04:21</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-input">
+                <div class="footer-toolbar">
+                    <span class="ft-icon">😊</span>
+                    <span class="ft-icon">📎</span>
+                    <span class="ft-icon">📷</span>
+                    <span class="ft-icon">🔔</span>
+                </div>
+                <div class="input-container">
+                    <div class="url-display">
+                        <span class="url-prefix">http://34.47.116.127:8080/</span>
+                        <div class="input-field">
+                            <input 
+                                type="text" 
+                                id="payloadInput" 
+                                placeholder="메시지 입력"
+                                autocomplete="off"
+                            />
+                        </div>
+                    </div>
+                    <button class="send-btn send-disabled" id="sendBtn" onclick="sendPayload()">
+                        전송
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const SERVER_USER_ID = '{{ user_id }}';
+    </script>
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
